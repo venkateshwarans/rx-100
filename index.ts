@@ -1,10 +1,10 @@
-import { from, fromEvent } from 'rxjs'
+import { from, fromEvent, range } from 'rxjs'
 import {map, distinct, distinctUntilChanged} from 'rxjs/operators'
 
 
 /** FROM **/
 
-export const stringer$ = from(['Venkateshwaran Selvaraj', 'Jahnavi Reddy'])
+export const stringer$ = from(['Venkateshwaran Selvaraj', 'AtamNirbhar'])
 
 
 stringer$.subscribe(console.log)
@@ -40,3 +40,18 @@ mover$.pipe(distinctUntilChanged()).subscribe(console.log)
 
 const scroller$ = fromEvent<UIEvent>(document, 'scroll')
 scroller$.pipe(distinctUntilChanged()).subscribe(console.log)
+
+
+/** RANGE */
+
+const ranger$ = range(10)
+ranger$.subscribe(console.log)
+
+const ranger2$ = range(1, 10)
+ranger2$.subscribe(console.log)
+
+const ranger3$ = range(10, 5)
+ranger3$.subscribe(console.log)
+
+const ranger4$ = range(5, 10)
+ranger4$.subscribe(console.log)
