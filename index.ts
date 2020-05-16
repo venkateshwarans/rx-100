@@ -1,12 +1,12 @@
 import { from } from 'rxjs'
 
-const stringer$ = from(['Venkateshwaran Selvaraj', 'Jahnavi Reddy'])
+export const stringer$ = from(['Venkateshwaran Selvaraj', 'Jahnavi Reddy'])
 
 
 stringer$.subscribe(console.log)
 
 
-const mapper$ = from(new Map([["Squirtle", "Water"],
+export const mapper$ = from(new Map([["Squirtle", "Water"],
     ["Charmander", "Fire"],
     ["Bulbasur", "Grass"]]))
 
@@ -20,3 +20,4 @@ promiser$.subscribe(console.log)
 const nodePicker$ = from(document.querySelectorAll('p'))
 
 nodePicker$.subscribe(console.log)
+
