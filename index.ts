@@ -1,4 +1,4 @@
-import { from, fromEvent, range } from 'rxjs'
+import { from, fromEvent, range, timer } from 'rxjs'
 import {map, distinct, distinctUntilChanged} from 'rxjs/operators'
 
 
@@ -55,3 +55,18 @@ ranger3$.subscribe(console.log)
 
 const ranger4$ = range(5, 10)
 ranger4$.subscribe(console.log)
+
+
+/** TIMER */
+
+const timer$ = timer()
+// timer$.subscribe(console.log)
+console.log('-----')
+const timer1$ = timer(1000)
+// timer1$.subscribe(console.log)
+console.log('-----')
+const timer2$ = timer(5000)
+// timer2$.subscribe(console.log)
+console.log('-----')
+const timer3$ = timer(1000, 1000)
+// timer3$.subscribe(console.log)
