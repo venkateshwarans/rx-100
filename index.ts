@@ -1,13 +1,15 @@
-import { from, fromEvent, range, timer } from 'rxjs'
+import { from, fromEvent, range, timer, interval } from 'rxjs'
 import {map, distinct, distinctUntilChanged} from 'rxjs/operators'
+import { ajax } from "rxjs/ajax";
 
-
+console.clear()
 /** FROM **/
 
 export const stringer$ = from(['Venkateshwaran Selvaraj', 'AtamNirbhar'])
 
 
 stringer$.subscribe(console.log)
+
 
 
 export const mapper$ = from(new Map([["Squirtle", "Water"],
@@ -63,10 +65,28 @@ const timer$ = timer()
 // timer$.subscribe(console.log)
 console.log('-----')
 const timer1$ = timer(1000)
-// timer1$.subscribe(console.log)
+timer1$.subscribe(console.log)
 console.log('-----')
 const timer2$ = timer(5000)
-// timer2$.subscribe(console.log)
+timer2$.subscribe(console.log)
 console.log('-----')
 const timer3$ = timer(1000, 1000)
 // timer3$.subscribe(console.log)
+
+
+/** INTERVAL */
+
+const intervellar$ = interval()
+// intervellar$.subscribe(console.log)
+
+const intervellar1$ = interval(2000)
+// intervellar1$.subscribe(console.log)
+
+
+/** AJAX */
+
+const ajaxer$ = ajax('https://swapi.dev/api/people/1/')
+ajaxer$.subscribe(console.log)
+
+const ajaxer2$ = ajax.getJSON('https://swapi.dev/api/starships/9/');
+ajaxer2$.subscribe(console.log)
