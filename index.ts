@@ -1,5 +1,6 @@
-import { from, fromEvent, range, timer, interval } from 'rxjs'
-import {map, distinct, distinctUntilChanged} from 'rxjs/operators'
+import { from, of, fromEvent, range, timer, interval } from 'rxjs'
+import { fromFetch } from "rxjs/fetch";
+import {map, distinct, distinctUntilChanged, switchMap, catchError, switchMapTo} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -86,10 +87,10 @@ const intervellar1$ = interval(2000)
 /** AJAX */
 
 const ajaxer$ = ajax('https://swapi.dev/api/people/1/')
-ajaxer$.subscribe(console.log)
+// ajaxer$.subscribe(console.log)
 
 const ajaxer2$ = ajax.getJSON('https://swapi.dev/api/starships/9/');
-ajaxer2$.subscribe(console.log)
+// ajaxer2$.subscribe(console.log)
 
 const ajaxer3$ = ajax({
   url: 'https://swapi.dev/api/planets/3/',
@@ -99,4 +100,27 @@ const ajaxer3$ = ajax({
   }
 })
 
-ajaxer3$.subscribe(console.log)
+// ajaxer3$.subscribe(console.log)
+
+/** FROM-FETCH */
+
+const starWarer$ = fromFetch('https://swapi.dev/api/vehicles/14/') 
+starWarer$.subscribe(console.log)
+
+const starWarer1$ = fromFetch('https://swapi.dev/api/vehicles/14/')
+starWarer1$.pipe(switchMap(response => response.json()))
+.subscribe(console.log)
+
+const starWarer2$ = fromFetch('https://swapi.dev/api/vehicles/14/')
+.pipe(switchMap(response => {
+  if(!response) {
+    throw `There was an error with status ${response.status}`;
+  }
+  return response.json()
+  }),
+  catchError(error => {
+    return of({ error: true, message: error });
+  })
+);
+
+starWarer2$.subscribe(console.log)
