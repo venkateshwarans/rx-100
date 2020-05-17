@@ -90,3 +90,13 @@ ajaxer$.subscribe(console.log)
 
 const ajaxer2$ = ajax.getJSON('https://swapi.dev/api/starships/9/');
 ajaxer2$.subscribe(console.log)
+
+const ajaxer3$ = ajax({
+  url: 'https://swapi.dev/api/planets/3/',
+  method: 'GET',
+  headers: {
+    'Content-Type': 'json'
+  }
+})
+
+ajaxer3$.subscribe(console.log)
