@@ -1,6 +1,6 @@
 import { from, of, defer, fromEvent, range, timer, interval, generate } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
-import {map, distinct, distinctUntilChanged, switchMap, catchError, switchMapTo, concatMap, delay, first} from 'rxjs/operators'
+import {map, distinct, distinctUntilChanged, switchMap, catchError, switchMapTo, concatMap, delay, first, skipUntil} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -68,7 +68,7 @@ const timer1$ = timer(1000)
 // timer1$.subscribe(console.log)
 const timer2$ = timer(5000)
 // timer2$.subscribe(console.log)
-const timer3$ = timer(1000, 1000)
+const timer3$ = timer(4000, 1000)
 // timer3$.subscribe(console.log)
 
 
@@ -180,10 +180,10 @@ const generator2$ = generate({
 /** distinctUntilChanged */
 
 const distincterUC$ = from([1, 2, 22,22,44,2,1,1,1,12,,3,4,5])
-distincterUC$.pipe(distinctUntilChanged()).subscribe(console.log)
+// distincterUC$.pipe(distinctUntilChanged()).subscribe(console.log)
 
 const distincterUC1$ = of(1, 2, 22,22,44,2,1,1,1,12,3,4,5)
-distincterUC1$.pipe(distinctUntilChanged()).subscribe(console.log)
+// distincterUC1$.pipe(distinctUntilChanged()).subscribe(console.log)
 
 
 const pokemon$ = of(
@@ -194,8 +194,18 @@ const pokemon$ = of(
   { name: "Charmander", type: "Fire" },
   { name: "Squirtle", type: "Water" },
   { name: "Bulbasaur", type: "Grass" }
-);
-
-pokemon$.pipe(
+).pipe(
   distinctUntilChanged(({name: newname}, {name}) => newname === name)
-).subscribe(console.log)
+)
+
+// pokemon$.subscribe(console.log)
+
+/** Skip Until */
+
+const skipper$ = interval(1000)
+const clicker1$ = fromEvent(document, 'click')
+const timerer$ = timer(10000)
+
+skipper$.pipe(skipUntil(clicker1$)).subscribe(console.log)
+skipper$.pipe(skipUntil(timerer$)).subscribe(console.log)
+
