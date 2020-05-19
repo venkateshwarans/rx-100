@@ -1,6 +1,6 @@
 import { from, of, defer, fromEvent, range, timer, interval, generate } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
-import {map, distinct, distinctUntilChanged, switchMap, catchError, switchMapTo, concatMap, delay, first, skipUntil, skipWhile, skip} from 'rxjs/operators'
+import {map, distinct, distinctUntilChanged, switchMap, catchError, switchMapTo, concatMap, delay, first, skipUntil, skipWhile, skip, skipLast} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -228,3 +228,12 @@ const skipWhiler1$ = from([
 
 const skipper$ = fromEvent<MouseEvent>(document, 'scroll').pipe(skip(100))
 // skipper$.subscribe(console.log)
+
+
+/** SKIP LAST */
+const skipLaster$ = of(149, 244, 2, 1, 3, 4, 4, 5, 2, 6, 7, 8, 7, 34).pipe(skipLast()); // By default skips last one
+skipLaster$.subscribe(console.log)
+
+const skipLaster1$ = of(149, 244, 2, 1, 3, 4, 4, 5, 2, 6, 7, 8, 7, 34).pipe(skipLast(5)); // 
+skipLaster1$.subscribe(console.log)
+
