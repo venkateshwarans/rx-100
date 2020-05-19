@@ -1,6 +1,6 @@
 import { from, of, defer, fromEvent, range, timer, interval } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
-import {map, distinct, distinctUntilChanged, switchMap, catchError, switchMapTo} from 'rxjs/operators'
+import {map, distinct, distinctUntilChanged, switchMap, catchError, switchMapTo, concatMap, delay, first} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -39,7 +39,7 @@ const keeeyer$ = fromEvent<KeyboardEvent>(document, 'keydown')
 keeeyer$.pipe(map(({code}) => code)).subscribe(console.log)
 
 const mover$ = fromEvent<MouseEvent>(document, 'mousemove')
-mover$.pipe(distinctUntilChanged()).subscribe(console.log)
+// mover$.pipe(distinctUntilChanged()).subscribe(console.log)
 
 const scroller$ = fromEvent<UIEvent>(document, 'scroll')
 scroller$.pipe(distinctUntilChanged()).subscribe(console.log)
@@ -140,3 +140,27 @@ deferrer$.subscribe(console.log)
 deferrer$.subscribe(console.log)
 
 
+/** Delay */
+const collectionIds = [1, 2, 34,544,55]
+from(collectionIds).pipe(concatMap(val => of(val).pipe(delay(1000))))
+.subscribe(
+  rs => console.log(rs),
+  err => console.log(err),
+  () => console.log('done')
+)
+
+/** FIRST  */
+
+const firster$ = from([1, 2, 3, 4, 5, 6, 7, 19])
+firster$.pipe(first()).subscribe(console.log)
+
+const firstEventer$ = fromEvent(document, 'click')
+firstEventer$.pipe(first()).subscribe(console.log)
+
+const firstElementer$ = from<NodeListOf<HTMLParagraphElement>>(document.querySelectorAll('p'))
+firstElementer$
+.pipe(first(({textContent}) => textContent.includes('V')))
+.subscribe(console.log)
+firstElementer$
+.pipe(first(({textContent}) => textContent.includes('v'), '<p>Butter</p>'))
+.subscribe(console.log)
