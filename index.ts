@@ -1,6 +1,6 @@
 import { from, of, defer, fromEvent, range, timer, interval, generate } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
-import {map, distinct, distinctUntilChanged, switchMap, catchError, switchMapTo, concatMap, delay, first, skipUntil, skipWhile} from 'rxjs/operators'
+import {map, distinct, distinctUntilChanged, switchMap, catchError, switchMapTo, concatMap, delay, first, skipUntil, skipWhile, skip} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -202,12 +202,12 @@ const pokemon$ = of(
 
 /** Skip Until */
 
-const skipper$ = interval(1000)
+const skipperUntil$ = interval(1000)
 const clicker1$ = fromEvent(document, 'click')
 const timerer$ = timer(10000)
 
-// skipper$.pipe(skipUntil(clicker1$)).subscribe(console.log)
-// skipper$.pipe(skipUntil(timerer$)).subscribe(console.log)
+// skipperUntil$.pipe(skipUntil(clicker1$)).subscribe(console.log)
+// skipperUntil$.pipe(skipUntil(timerer$)).subscribe(console.log)
 
 
 /** SkipWhile  */
@@ -223,3 +223,8 @@ const skipWhiler1$ = from([
   { name: "Squirtle", type: "Water" }
 ]).pipe(skipWhile(({type}) => type === 'Grass'))
 // skipWhiler1$.subscribe(console.log)
+
+/** SKIP */
+
+const skipper$ = fromEvent<MouseEvent>(document, 'scroll').pipe(skip(100))
+// skipper$.subscribe(console.log)
