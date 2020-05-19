@@ -36,13 +36,13 @@ const clicker$ = fromEvent(document, 'click');
 // clicker$.subscribe(console.log)
 
 const keeeyer$ = fromEvent<KeyboardEvent>(document, 'keydown')
-keeeyer$.pipe(map(({code}) => code)).subscribe(console.log)
+// keeeyer$.pipe(map(({code}) => code)).subscribe(console.log)
 
 const mover$ = fromEvent<MouseEvent>(document, 'mousemove')
 // mover$.pipe(distinctUntilChanged()).subscribe(console.log)
 
 const scroller$ = fromEvent<UIEvent>(document, 'scroll')
-scroller$.pipe(distinctUntilChanged()).subscribe(console.log)
+// scroller$.pipe(distinctUntilChanged()).subscribe(console.log)
 
 
 /** RANGE */
@@ -64,13 +64,10 @@ const ranger4$ = range(5, 10)
 
 const timer$ = timer()
 // timer$.subscribe(console.log)
-console.log('-----')
 const timer1$ = timer(1000)
 // timer1$.subscribe(console.log)
-console.log('-----')
 const timer2$ = timer(5000)
 // timer2$.subscribe(console.log)
-console.log('-----')
 const timer3$ = timer(1000, 1000)
 // timer3$.subscribe(console.log)
 
@@ -131,50 +128,74 @@ function getPi() {
   return pi[Math.floor(Math.random() * 3)]
 }
 const offer$ = of(getPi())
-offer$.subscribe(console.log)
-offer$.subscribe(console.log)
-offer$.subscribe(console.log)
+// offer$.subscribe(console.log)
+// offer$.subscribe(console.log)
+// offer$.subscribe(console.log)
 const deferrer$ = defer(() => of(getPi()))
-deferrer$.subscribe(console.log)
-deferrer$.subscribe(console.log)
-deferrer$.subscribe(console.log)
+// deferrer$.subscribe(console.log)
+// deferrer$.subscribe(console.log)
+// deferrer$.subscribe(console.log)
 
 
 /** Delay */
 const collectionIds = [1, 2, 34,544,55]
-from(collectionIds).pipe(concatMap(val => of(val).pipe(delay(1000))))
-.subscribe(
-  rs => console.log(rs),
-  err => console.log(err),
-  () => console.log('done')
-)
+const delayer$ = from(collectionIds).pipe(concatMap(val => of(val).pipe(delay(1000))))
+// delayer$.subscribe(
+//   rs => console.log(rs),
+//   err => console.log(err),
+//   () => console.log('done')
+// )
 
 /** FIRST  */
 
 const firster$ = from([1, 2, 3, 4, 5, 6, 7, 19])
-firster$.pipe(first()).subscribe(console.log)
+// firster$.pipe(first()).subscribe(console.log)
 
 const firstEventer$ = fromEvent(document, 'click')
-firstEventer$.pipe(first()).subscribe(console.log)
+// firstEventer$.pipe(first()).subscribe(console.log)
 
 const firstElementer$ = from<NodeListOf<HTMLParagraphElement>>(document.querySelectorAll('p'))
 //First value based on condition
-firstElementer$
-.pipe(first(({textContent}) => textContent.includes('V')))
-.subscribe(console.log)
+// firstElementer$
+// .pipe(first(({textContent}) => textContent.includes('V')))
+// .subscribe(console.log)
 //First but a default value
-firstElementer$
-.pipe(first(({textContent}) => textContent.includes('v'), '<p>Butter</p>'))
-.subscribe(console.log)
+// firstElementer$
+// .pipe(first(({textContent}) => textContent.includes('v'), '<p>Butter</p>'))
+// .subscribe(console.log)
 
 /** Generate */
 
 const generator$ = generate(10, x => x < 10000, x => x * 5)
-generator$.subscribe(console.log)
+// generator$.subscribe(console.log)
 
 const generator2$ = generate({
   initialState: 100,
   condition: x => x < 100000,
   iterate: x => x * 10
 })
-generator2$.subscribe(console.log)
+// generator2$.subscribe(console.log)
+
+
+/** distinctUntilChanged */
+
+const distincterUC$ = from([1, 2, 22,22,44,2,1,1,1,12,,3,4,5])
+distincterUC$.pipe(distinctUntilChanged()).subscribe(console.log)
+
+const distincterUC1$ = of(1, 2, 22,22,44,2,1,1,1,12,3,4,5)
+distincterUC1$.pipe(distinctUntilChanged()).subscribe(console.log)
+
+
+const pokemon$ = of(
+  { name: "Squirtle", type: "Water" },
+  { name: "Bulbasaur", type: "Grass" },
+  { name: "Bulbasaur", type: "Grass" },
+  { name: "Charmander", type: "Fire" },
+  { name: "Charmander", type: "Fire" },
+  { name: "Squirtle", type: "Water" },
+  { name: "Bulbasaur", type: "Grass" }
+);
+
+pokemon$.pipe(
+  distinctUntilChanged(({name: newname}, {name}) => newname === name)
+).subscribe(console.log)
