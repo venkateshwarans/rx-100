@@ -1,4 +1,4 @@
-import { from, of, defer, fromEvent, range, timer, interval } from 'rxjs'
+import { from, of, defer, fromEvent, range, timer, interval, generate } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
 import {map, distinct, distinctUntilChanged, switchMap, catchError, switchMapTo, concatMap, delay, first} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
@@ -158,9 +158,23 @@ const firstEventer$ = fromEvent(document, 'click')
 firstEventer$.pipe(first()).subscribe(console.log)
 
 const firstElementer$ = from<NodeListOf<HTMLParagraphElement>>(document.querySelectorAll('p'))
+//First value based on condition
 firstElementer$
 .pipe(first(({textContent}) => textContent.includes('V')))
 .subscribe(console.log)
+//First but a default value
 firstElementer$
 .pipe(first(({textContent}) => textContent.includes('v'), '<p>Butter</p>'))
 .subscribe(console.log)
+
+/** Generate */
+
+const generator$ = generate(10, x => x < 10000, x => x * 5)
+generator$.subscribe(console.log)
+
+const generator2$ = generate({
+  initialState: 100,
+  condition: x => x < 100000,
+  iterate: x => x * 10
+})
+generator2$.subscribe(console.log)
