@@ -1,12 +1,12 @@
 import { from, of, defer, fromEvent, range, timer, interval, generate } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
-import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast} from 'rxjs/operators'
+import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
 const obj = [
   { name: "Squirtle", type: "Water" },
-  { name: "Squirrle", type: "Mercury" },
+  { name: "Oquirrle", type: "Mercury" },
   { name: "Bulbasaur", type: "Grass" },
   { name: "Bulbasaur", type: "Grass" },
   { name: "Charmander", type: "Fire" },
@@ -282,3 +282,14 @@ const distinctUCK1$ = from(obj)
   )
 )
 // distinctUCK1$.subscribe(console.log)
+
+/** Find */
+
+const finder$ = from(obj).pipe(find(({name}) => name.includes('aur')))
+// finder$.subscribe(console.log)
+
+/** Take */
+
+const taker$ = from(obj).pipe(take(2))
+taker$.subscribe(console.log)
+
