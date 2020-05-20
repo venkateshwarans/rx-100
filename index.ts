@@ -291,5 +291,9 @@ const finder$ = from(obj).pipe(find(({name}) => name.includes('aur')))
 /** Take */
 
 const taker$ = from(obj).pipe(take(2))
-taker$.subscribe(console.log)
+// taker$.subscribe(console.log)
 
+/** Take Last */
+
+const takeLaster$ = from(obj).pipe(takeLast(3))
+takeLaster$.subscribe(console.log)
