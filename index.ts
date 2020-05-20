@@ -1,11 +1,12 @@
 import { from, of, defer, fromEvent, range, timer, interval, generate } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
-import {map, distinct, distinctUntilChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast} from 'rxjs/operators'
+import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
 const obj = [
   { name: "Squirtle", type: "Water" },
+  { name: "Squirrle", type: "Mercury" },
   { name: "Bulbasaur", type: "Grass" },
   { name: "Bulbasaur", type: "Grass" },
   { name: "Charmander", type: "Fire" },
@@ -263,7 +264,21 @@ const distincter1$ = of(
 
 /** Last */
 const laster$ = from(document.querySelectorAll('p')).pipe(last())
-laster$.subscribe(console.log)
+// laster$.subscribe(console.log)
 
 const laster1$ = from(obj).pipe(last(({type}) => type === 'Fire'))
-laster1$.subscribe(console.log)
+// laster1$.subscribe(console.log)
+
+/** distinctUntilKeyChanged */
+
+const distinctUCK$ = fromEvent<KeyboardEvent>(document, 'keydown')
+.pipe(distinctUntilKeyChanged('keyCode'))
+distinctUCK$.subscribe(console.log)
+
+const distinctUCK1$ = from(obj)
+.pipe(
+  distinctUntilChanged(
+    ({name : oldname}, {name}) => name.substring(0, 3) === oldname.substring(0, 3), 
+  )
+)
+// distinctUCK1$.subscribe(console.log)
