@@ -232,8 +232,22 @@ const skipper$ = fromEvent<MouseEvent>(document, 'scroll').pipe(skip(100))
 
 /** SKIP LAST */
 const skipLaster$ = of(149, 244, 2, 1, 3, 4, 4, 5, 2, 6, 7, 8, 7, 34).pipe(skipLast()); // By default skips last one
-skipLaster$.subscribe(console.log)
+// skipLaster$.subscribe(console.log)
 
 const skipLaster1$ = of(149, 244, 2, 1, 3, 4, 4, 5, 2, 6, 7, 8, 7, 34).pipe(skipLast(5)); // 
-skipLaster1$.subscribe(console.log)
+// skipLaster1$.subscribe(console.log)
 
+
+/** distinct */
+const distincter$ = from([1, 3, 4, 5,4,4,4, 5,6,3,1,3,550, 10]).pipe(distinct())
+distincter$.subscribe(console.log)
+const distincter1$ = of(
+  { name: "Squirtle", type: "Water" },
+  { name: "Bulbasaur", type: "Grass" },
+  { name: "Bulbasaur", type: "Grass" },
+  { name: "Charmander", type: "Fire" },
+  { name: "Charmander", type: "Fire" },
+  { name: "Squirtle", type: "Water" },
+  { name: "Bulbasaur", type: "Grass" }
+).pipe(distinct(({name}) => name))
+distincter1$.subscribe(console.log)
