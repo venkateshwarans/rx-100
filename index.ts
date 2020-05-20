@@ -1,9 +1,18 @@
 import { from, of, defer, fromEvent, range, timer, interval, generate } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
-import {map, distinct, distinctUntilChanged, switchMap, catchError, switchMapTo, concatMap, delay, first, skipUntil, skipWhile, skip, skipLast} from 'rxjs/operators'
+import {map, distinct, distinctUntilChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
+const obj = [
+  { name: "Squirtle", type: "Water" },
+  { name: "Bulbasaur", type: "Grass" },
+  { name: "Bulbasaur", type: "Grass" },
+  { name: "Charmander", type: "Fire" },
+  { name: "Charmander", type: "Fire" },
+  { name: "Squirtle", type: "Water" },
+  { name: "Bulbasaur", type: "Grass" }
+]
 /** FROM **/
 
 export const stringer$ = from(['Venkateshwaran Selvaraj', 'AtamNirbhar'])
@@ -240,7 +249,7 @@ const skipLaster1$ = of(149, 244, 2, 1, 3, 4, 4, 5, 2, 6, 7, 8, 7, 34).pipe(skip
 
 /** distinct */
 const distincter$ = from([1, 3, 4, 5,4,4,4, 5,6,3,1,3,550, 10]).pipe(distinct())
-distincter$.subscribe(console.log)
+// distincter$.subscribe(console.log)
 const distincter1$ = of(
   { name: "Squirtle", type: "Water" },
   { name: "Bulbasaur", type: "Grass" },
@@ -250,4 +259,11 @@ const distincter1$ = of(
   { name: "Squirtle", type: "Water" },
   { name: "Bulbasaur", type: "Grass" }
 ).pipe(distinct(({name}) => name))
-distincter1$.subscribe(console.log)
+// distincter1$.subscribe(console.log)
+
+/** Last */
+const laster$ = from(document.querySelectorAll('p')).pipe(last())
+laster$.subscribe(console.log)
+
+const laster1$ = from(obj).pipe(last(({type}) => type === 'Fire'))
+laster1$.subscribe(console.log)
