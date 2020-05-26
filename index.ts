@@ -1,6 +1,6 @@
 import { from, of, defer, fromEvent, range, timer, interval, generate } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
-import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast} from 'rxjs/operators'
+import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast, exhaustMap} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -297,3 +297,10 @@ const taker$ = from(obj).pipe(take(2))
 
 const takeLaster$ = from(obj).pipe(takeLast(3))
 takeLaster$.subscribe(console.log)
+
+var clicks = fromEvent(document, 'click');
+var results = clicks.pipe(
+  exhaustMap(ev => interval(1000).pipe(take(1)))
+);
+
+results.subscribe(console.log)
