@@ -1,7 +1,7 @@
 import { from, of, defer, fromEvent, range, timer, interval, generate, Subject } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
 import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast, exhaustMap,
-takeUntil, takeWhile, debounce, single} from 'rxjs/operators'
+takeUntil, takeWhile, debounce, single, debounceTime} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -386,3 +386,13 @@ const singlePokemonTwoInstance$ = from([
 
 singlePokemonTwoInstance$.pipe(single(({type}) => type === 'Water'))
 // .subscribe((val) => {console.log(val)}, (err) => console.log(err));
+
+
+/** Debounce Time */
+
+// debouncetime() is very similar to debounce(), but we provide the timeout directly instead of providing an Observable 
+
+const debounceTimeTyper$ = fromEvent<KeyboardEvent>(document, 'keydown')
+debounceTimeTyper$.pipe(debounceTime(800))
+.subscribe(({code}) => console.log(code))
+
