@@ -1,7 +1,7 @@
 import { from, of, defer, fromEvent, range, timer, interval, generate, Subject } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
 import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast, exhaustMap,
-takeUntil} from 'rxjs/operators'
+takeUntil, takeWhile} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -326,7 +326,32 @@ function stop() {
 }
 interval(1000)
   .pipe(takeUntil(stop$))
-  .subscribe(console.log)
+  // .subscribe(console.log)
 
 takeUntilTimer$
-.subscribe(()=> stop()) 
+// .subscribe(()=> stop()) 
+
+
+/** Take While */
+
+const takeWhileNumber$ = interval(1000).pipe(
+  takeWhile(num => num < 10)
+)
+
+takeWhileNumber$
+// .subscribe(console.log)
+
+const takeWhilePokemon$ = from([
+  { name: "Bulbasaur", type: "Grass" },
+  { name: "Chikorita", type: "Grass" },
+  { name: "Charmander", type: "Fire" },
+  { name: "Treecko", type: "Grass" },
+  { name: "Squirtle", type: "Water" }
+]);
+
+takeWhilePokemon$.pipe(
+  takeWhile(({type}) => type === 'Grass', true)
+)
+// .subscribe(console.log)
+
+
