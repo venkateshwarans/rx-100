@@ -1,6 +1,7 @@
-import { from, of, defer, fromEvent, range, timer, interval, generate } from 'rxjs'
+import { from, of, defer, fromEvent, range, timer, interval, generate, Subject } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
-import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast, exhaustMap} from 'rxjs/operators'
+import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast, exhaustMap,
+takeUntil} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -296,11 +297,36 @@ const taker$ = from(obj).pipe(take(2))
 /** Take Last */
 
 const takeLaster$ = from(obj).pipe(takeLast(3))
-takeLaster$.subscribe(console.log)
+// takeLaster$.subscribe(console.log)
 
 var clicks = fromEvent(document, 'click');
 var results = clicks.pipe(
   exhaustMap(ev => interval(1000).pipe(take(1)))
 );
 
-results.subscribe(console.log)
+// results.subscribe(console.log)
+
+
+/** Take Until */
+
+const takeUntilNumbers$ = interval(1000);
+const takeUntilTimer$ = timer(4000);
+takeUntilNumbers$.pipe(takeUntil(takeUntilTimer$))
+// .subscribe(console.log)
+
+const takeUntilClicker$ = fromEvent(document.querySelector('body'), 'click');
+takeUntilNumbers$.pipe(takeUntil(takeUntilClicker$))
+// .subscribe(console.log)
+
+const stop$ = new Subject<void>();
+
+function stop() {
+  stop$.next()
+  stop$.complete()
+}
+interval(1000)
+  .pipe(takeUntil(stop$))
+  .subscribe(console.log)
+
+takeUntilTimer$
+.subscribe(()=> stop()) 
