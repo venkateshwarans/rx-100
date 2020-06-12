@@ -1,7 +1,7 @@
 import { from, of, defer, fromEvent, range, timer, interval, generate, Subject } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
 import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast, exhaustMap,
-takeUntil, takeWhile} from 'rxjs/operators'
+takeUntil, takeWhile, debounce} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -274,7 +274,7 @@ const laster1$ = from(obj).pipe(last(({type}) => type === 'Fire'))
 
 const distinctUCK$ = fromEvent<KeyboardEvent>(document, 'keydown')
 .pipe(distinctUntilKeyChanged('keyCode'))
-distinctUCK$.subscribe(console.log)
+// distinctUCK$.subscribe(console.log)
 
 const distinctUCK1$ = from(obj)
 .pipe(
@@ -355,3 +355,12 @@ takeWhilePokemon$.pipe(
 // .subscribe(console.log)
 
 
+/** Debouce */
+
+const debouncingKey$ = fromEvent<KeyboardEvent>(document, "keydown");
+debouncingKey$.pipe(debounce(() => interval(1000)))
+// .subscribe(({code}) => console.log(code))
+
+const debounceClicker$ = fromEvent<MouseEvent>(document, 'click');
+debounceClicker$.pipe(debounce(() => interval(500)))
+// .subscribe(({screenX, screenY}) => console.log(screenX, screenY))
