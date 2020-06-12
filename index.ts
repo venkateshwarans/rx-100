@@ -1,7 +1,7 @@
 import { from, of, defer, fromEvent, range, timer, interval, generate, Subject } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
 import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast, exhaustMap,
-takeUntil, takeWhile, debounce} from 'rxjs/operators'
+takeUntil, takeWhile, debounce, single} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -364,3 +364,25 @@ debouncingKey$.pipe(debounce(() => interval(1000)))
 const debounceClicker$ = fromEvent<MouseEvent>(document, 'click');
 debounceClicker$.pipe(debounce(() => interval(500)))
 // .subscribe(({screenX, screenY}) => console.log(screenX, screenY))
+
+
+/** Single */
+
+const singlePokemon$ = from([
+  { name: "Bulbasaur", type: "Grass" },
+  { name: "Charmander", type: "Fire" },
+  { name: "Squirtle", type: "Water" }
+]);
+
+singlePokemon$.pipe(single(({type}) => type === 'Grass'))
+// .subscribe((res) => {console.log(res)}, (err)=> {console.log(err)})
+
+const singlePokemonTwoInstance$ = from([
+  { name: "Bulbasaur", type: "Grass" },
+  { name: "Charmander", type: "Fire" },
+  { name: "Squirtle", type: "Water" },
+  { name: "Squirtle", type: "Water" }
+]);
+
+singlePokemonTwoInstance$.pipe(single(({type}) => type === 'Water'))
+// .subscribe((val) => {console.log(val)}, (err) => console.log(err));
