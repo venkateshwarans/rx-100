@@ -1,7 +1,7 @@
-import { from, of, defer, fromEvent, range, timer, interval, generate, Subject } from 'rxjs'
+import { from, of, defer, fromEvent, range, timer, interval, generate, Subject, throwError } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
 import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast, exhaustMap,
-takeUntil, takeWhile, debounce, single, debounceTime} from 'rxjs/operators'
+takeUntil, takeWhile, debounce, single, debounceTime, ignoreElements} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -396,3 +396,20 @@ const debounceTimeTyper$ = fromEvent<KeyboardEvent>(document, 'keydown')
 debounceTimeTyper$.pipe(debounceTime(800))
 .subscribe(({code}) => console.log(code))
 
+
+/** Ignore Elements */
+
+const ignoreElements$ = of(
+  "You aren't good enough",
+  "Your code is sh*t",
+  "You'll never be a good programmer",
+  "Women can't code"
+);
+// Will ignore all emitted values
+
+ignoreElements$.pipe(ignoreElements())
+.subscribe(console.log, console.error, () => console.log('completed'))
+
+const ignoreElementsWhenError$ = throwError('Throwing error')
+ignoreElementsWhenError$.pipe(ignoreElements())
+.subscribe(console.log, console.error, () => console.log('completed'))
