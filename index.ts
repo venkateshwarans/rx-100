@@ -1,7 +1,7 @@
 import { from, of, defer, fromEvent, range, timer, interval, generate, Subject, throwError } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
 import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast, exhaustMap,
-takeUntil, takeWhile, debounce, single, debounceTime, ignoreElements} from 'rxjs/operators'
+takeUntil, takeWhile, debounce, single, debounceTime, ignoreElements, sample} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -408,8 +408,19 @@ const ignoreElements$ = of(
 // Will ignore all emitted values
 
 ignoreElements$.pipe(ignoreElements())
-.subscribe(console.log, console.error, () => console.log('completed'))
+// .subscribe(console.log, console.error, () => console.log('completed'))
 
 const ignoreElementsWhenError$ = throwError('Throwing error')
 ignoreElementsWhenError$.pipe(ignoreElements())
-.subscribe(console.log, console.error, () => console.log('completed'))
+// .subscribe(console.log, console.error, () => console.log('completed'))
+
+/** Sample */
+
+const sampler$ = interval(1000)
+const samplerKey$ = fromEvent<KeyboardEvent>(document, 'keydown')
+
+sampler$.pipe(sample(interval(4000)))
+// .subscribe(console.log)
+
+sampler$.pipe(sample(samplerKey$))
+.subscribe(console.log)
