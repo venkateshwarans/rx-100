@@ -1,7 +1,8 @@
 import { from, of, defer, fromEvent, range, timer, interval, generate, Subject, throwError } from 'rxjs'
 import { fromFetch } from "rxjs/fetch";
 import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast, exhaustMap,
-takeUntil, takeWhile, debounce, single, debounceTime, ignoreElements, sample} from 'rxjs/operators'
+takeUntil, takeWhile, debounce, single, debounceTime, ignoreElements, sample,
+filter} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -394,7 +395,7 @@ singlePokemonTwoInstance$.pipe(single(({type}) => type === 'Water'))
 
 const debounceTimeTyper$ = fromEvent<KeyboardEvent>(document, 'keydown')
 debounceTimeTyper$.pipe(debounceTime(800))
-.subscribe(({code}) => console.log(code))
+// .subscribe(({code}) => console.log(code))
 
 
 /** Ignore Elements */
@@ -423,4 +424,15 @@ sampler$.pipe(sample(interval(4000)))
 // .subscribe(console.log)
 
 sampler$.pipe(sample(samplerKey$))
+// .subscribe(console.log)
+
+/** Filter */
+
+const filter$ = range(1, 10);
+filter$.pipe(filter((val) => val > 5))
 .subscribe(console.log)
+
+const filterKeyer$ = fromEvent<KeyboardEvent>(document, 'keydown');
+filterKeyer$.pipe(
+  filter(({code}) => code !== 'Space')
+).subscribe(console.log)
