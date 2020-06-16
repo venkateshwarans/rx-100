@@ -2,7 +2,7 @@ import { from, of, defer, fromEvent, range, timer, interval, generate, Subject, 
 import { fromFetch } from "rxjs/fetch";
 import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast, exhaustMap,
 takeUntil, takeWhile, debounce, single, debounceTime, ignoreElements, sample,
-filter} from 'rxjs/operators'
+filter, sampleTime} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -420,8 +420,8 @@ ignoreElementsWhenError$.pipe(ignoreElements())
 const sampler$ = interval(1000)
 const samplerKey$ = fromEvent<KeyboardEvent>(document, 'keydown')
 
-sampler$.pipe(sample(interval(4000)))
-// .subscribe(console.log)
+sampler$.pipe(sample(interval(1000)))
+// .subscribe((val) => console.log(`sample - ${val}`))
 
 sampler$.pipe(sample(samplerKey$))
 // .subscribe(console.log)
@@ -430,9 +430,15 @@ sampler$.pipe(sample(samplerKey$))
 
 const filter$ = range(1, 10);
 filter$.pipe(filter((val) => val > 5))
-.subscribe(console.log)
+// .subscribe(console.log)
 
 const filterKeyer$ = fromEvent<KeyboardEvent>(document, 'keydown');
-filterKeyer$.pipe(
-  filter(({code}) => code !== 'Space')
-).subscribe(console.log)
+filterKeyer$.pipe(filter(({code}) => code !== 'Space'))
+// .subscribe(console.log)
+
+
+/** SampleTime */
+
+const sampleTimer$ = interval(1000);
+sampler$.pipe(sampleTime(1000))
+// .subscribe((val) => console.log(`sampleTime - ${val}`))
