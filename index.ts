@@ -2,7 +2,7 @@ import { from, of, defer, fromEvent, range, timer, interval, generate, Subject, 
 import { fromFetch } from "rxjs/fetch";
 import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast, exhaustMap,
 takeUntil, takeWhile, debounce, single, debounceTime, ignoreElements, sample,
-filter, sampleTime} from 'rxjs/operators'
+filter, sampleTime, throttle} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -442,3 +442,14 @@ filterKeyer$.pipe(filter(({code}) => code !== 'Space'))
 const sampleTimer$ = interval(1000);
 sampler$.pipe(sampleTime(1000))
 // .subscribe((val) => console.log(`sampleTime - ${val}`))
+
+/** Throttle */
+
+
+// Observable will emit the pressed key, then ignore everything for 4s, then repeat. 
+
+const throttler$ = fromEvent<KeyboardEvent>(document, 'keydown')
+throttler$.pipe(throttle(() => interval(4000)))
+.subscribe(({code}) => console.log(code))
+
+
