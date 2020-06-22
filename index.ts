@@ -2,7 +2,7 @@ import { from, of, defer, fromEvent, range, timer, interval, generate, Subject, 
 import { fromFetch } from "rxjs/fetch";
 import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast, exhaustMap,
 takeUntil, takeWhile, debounce, single, debounceTime, ignoreElements, sample,
-filter, sampleTime, throttle, audit} from 'rxjs/operators'
+filter, sampleTime, throttle, audit, auditTime} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -458,4 +458,9 @@ throttler$.pipe(throttle(() => interval(4000)))
 
 const auditor$ = fromEvent<MouseEvent>(document, 'mousemove');
 auditor$.pipe(audit(() => interval(2000)))
-// .subscribe(({clientX}) => console.log(clientX))
+.subscribe(({clientX}) => console.log(clientX))
+
+/** Audit Time */
+const auditTimer$ = fromEvent<MouseEvent>(document, 'mousemove');
+auditTimer$.pipe(auditTime(2000))
+.subscribe(console.log)
