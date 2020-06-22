@@ -2,7 +2,7 @@ import { from, of, defer, fromEvent, range, timer, interval, generate, Subject, 
 import { fromFetch } from "rxjs/fetch";
 import {map, distinct, distinctUntilChanged, distinctUntilKeyChanged, switchMap, catchError, switchMapTo, concatMap, last, delay, first, skipUntil, skipWhile, skip, skipLast, find, take, takeLast, exhaustMap,
 takeUntil, takeWhile, debounce, single, debounceTime, ignoreElements, sample,
-filter, sampleTime, throttle} from 'rxjs/operators'
+filter, sampleTime, throttle, audit} from 'rxjs/operators'
 import { ajax } from "rxjs/ajax";
 
 console.clear()
@@ -450,6 +450,12 @@ sampler$.pipe(sampleTime(1000))
 
 const throttler$ = fromEvent<KeyboardEvent>(document, 'keydown')
 throttler$.pipe(throttle(() => interval(4000)))
-.subscribe(({code}) => console.log(code))
+// .subscribe(({code}) => console.log(code))
 
 
+/** Audit */
+// Will ignore our mouse movement for 2s, then emit the last position x, and repeat
+
+const auditor$ = fromEvent<MouseEvent>(document, 'mousemove');
+auditor$.pipe(audit(() => interval(2000)))
+// .subscribe(({clientX}) => console.log(clientX))
